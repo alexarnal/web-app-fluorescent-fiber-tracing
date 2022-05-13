@@ -7,6 +7,7 @@ Please refer to my [project blog](https://sites.google.com/view/project-blogs/bl
 ## Usage
 
 Once you download the repo and install the dependencies, simply run `python app.py` and a browser window will open with the app. 
+Additional to the python dependencies, you will have to [compile the c program](https://github.com/LingDong-/skeleton-tracing/blob/master/c/README.md) by running `gcc trace_skeleton.c -lX11 -lpng -lm -lpthread -std=c99`.
 
 ## Resources
 
