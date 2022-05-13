@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Fiber Segmentation</title>
+
+{% endblock %}
+
+{% block body %} 
+<br><br>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Fluorescent Fiber Segmentation</h1>
+        <p>This application takes a PNG or TIFF file of fluorescent fibers and segments fiber signal. It then vectorizes the segmentation by obtaining the contours of the fibers which are saved as an SVG file for download.</p>
+        
+        {% if download == False %}
+        <form action="/" method="POST" enctype="multipart/form-data">
+            <h3>1. Select your image file</h3>
+            <br>
+            <input type="file" name="image[]" id="image[]" multiple='' accept=".tif,.png,.tiff" required>
+            <br>
+            <h3>2. Select appropiate parameters</h3>
+            <p>Choose the channel you want to analyze if using a color image, or select gray if image is a gray scale image.</p><p style="font-size:12pt">Note, "Gray" is the default parameter; if given a color image, the program will convert it to a gray scale image before processing.</p>
+            <input style="margin-left:  0px;" name="channel" type="radio" id="red"   value="red"            > Red </input>
+            <input style="margin-left: 16px;" name="channel" type="radio" id="green" value="green"          > Green </input>
+            <input style="margin-left: 16px;" name="channel" type="radio" id="blue"  value="blue"           > Blue </input>
+            <input style="margin-left: 16px;" name="channel" type="radio" id="gray"  value="gray"           > Gray </label>
+            <input style="margin-left: 16px;" name="channel" type="radio" id="color"  value="color" checked > Color </label>
+            <br><br>
+            <button type="submit" class="btn btn-warning">Run</button> <!-- id="compute" onclick="getDensityMap()" -->
+        </form>
+        <br><br>
+        {% elif multiple == False %}
+        <form action="/" method="GET">
+            <button type="submit"  class="btn btn-success"><a href="{{url_for('download_file')}}" style="text-decoration:none;color: #FFFFFF">Download</a></button>
+            <button type="submit"  class="btn btn-warning"><a href="{{url_for('again')}}" style="text-decoration:none;color: #FFFFFF">Run Another</a></button>
+        </form>
+        {% elif multiple == True %}
+        <form action="/" method="GET">
+            <button type="submit"  class="btn btn-success"><a href="{{url_for('download_zip')}}" style="text-decoration:none;color: #FFFFFF">Download</a></button>
+            <button type="submit"  class="btn btn-warning"><a href="{{url_for('again')}}" style="text-decoration:none;color: #FFFFFF">Run Another</a></button>
+        </form>
+        <br><br>
+        {% endif  %}
+        <!--div class="embed-responsive embed-responsive-16by9" >
+            <iframe class="embed-responsive-item" src="https://player.vimeo.com/video/505908696"  frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        </div-->
+        <br>
+    </div>
+</div>
+<br><br>
+{% endblock %}
+
