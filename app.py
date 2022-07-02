@@ -10,9 +10,9 @@ from threading import Timer
 def open_browser():
     webbrowser.open_new('http://127.0.0.1:2000/') 
 
-def predict(inFileName, channel):
+def predict(inFileName, channel, raw_output, thrs_output, contour_output, skeleton_output, unet_agrp, thr):
     print(f"\n\n\n\nRunning Prediction on {inFileName}")
-    run(img_path=inFileName, channel=channel)
+    run(img_path=inFileName, channel=channel, raw_output=raw_output, thrs_output=thrs_output, contour_output=contour_output, skeleton_output=skeleton_output, unet_agrp=unet_agrp, thr=thr)
     os.remove(inFileName)
     print("\n\n\n\nfinished predicting")
     
@@ -29,16 +29,42 @@ def index():
     if request.method == 'POST':
         if request.files:
             for image in request.files.getlist('image[]'):
+                print('getting channel')
                 channel = request.form['channel']
+                print(channel)
+                print('getting output')
+                raw_output, thrs_output, contour_output, skeleton_output, unet_agrp = '0', '0', '0', '0', '0'
+                try: 
+                    unet_agrp = request.form['U-Net_AgRP']
+                except: 
+                    print('not using unet_agrp')
+                try: 
+                    raw_output = request.form['raw_output']
+                except: 
+                    print('not saving raw')
+                try: 
+                    thrs_output = request.form['thrs_output']
+                except: 
+                    print('not saving thrs')
+                try:
+                    contour_output = request.form['contour_output']
+                except: 
+                    print('not saving contour')
+                try:
+                    skeleton_output = request.form['skeleton_output']
+                except: 
+                    print('not saving skeleton')
+                thr = float(request.form['threshold'])
+                print('threshold is', thr)
                 image.save(os.path.join(app.config['IMAGE_UPLOADS'],image.filename))
                 app.config['OUTPUT_NAME'] = os.path.splitext(image.filename)[0]
                 try:
                     inFileName = os.path.join(app.config['IMAGE_UPLOADS'],image.filename)
-                    predict(inFileName, channel)
+                    predict(inFileName, channel, raw_output, thrs_output, contour_output, skeleton_output, unet_agrp, thr)
                     download=True
                 except Exception as ex:
-                    print('There was an issue running cell detection:', ex)
-            if len(request.files.getlist('image[]'))>1:
+                    print('There was an issue at runtime:', ex)
+            if len(request.files.getlist('image[]'))>1 or True:
                 print('uploaded multiple')
                 multiple=True
                 shutil.make_archive('download', 'zip', 'uploads')

@@ -10,7 +10,7 @@
 <div class="container">
     <div class="jumbotron">
         <h1>Fluorescent Fiber Segmentation</h1>
-        <p>This application takes a PNG or TIFF file of fluorescent fibers and segments fiber signal. It then vectorizes the segmentation by obtaining the contours of the fibers which are saved as an SVG file for download.</p>
+        <p>This application takes a PNG or TIFF file of fluorescent fibers and segments fiber signal. It then processes the segmentation to generate downloadable SVG files.</p>
         
         {% if download == False %}
         <form action="/" method="POST" enctype="multipart/form-data">
@@ -19,13 +19,32 @@
             <input type="file" name="image[]" id="image[]" multiple='' accept=".tif,.png,.tiff" required>
             <br>
             <h3>2. Select appropiate parameters</h3>
-            <p>Choose the channel you want to analyze if using a color image, or select gray if image is a gray scale image.</p><p style="font-size:12pt">Note, "Gray" is the default parameter; if given a color image, the program will convert it to a gray scale image before processing.</p>
-            <input style="margin-left:  0px;" name="channel" type="radio" id="red"   value="red"            > Red </input>
+            <p>Determine if your image is a grayscale or color image.</p>
+            <!--p style="font-size:12pt">Note, "Color" is the default selection. </p-->
+            <!--input style="margin-left:  0px;" name="channel" type="radio" id="red"   value="red"            > Red </input>
             <input style="margin-left: 16px;" name="channel" type="radio" id="green" value="green"          > Green </input>
-            <input style="margin-left: 16px;" name="channel" type="radio" id="blue"  value="blue"           > Blue </input>
-            <input style="margin-left: 16px;" name="channel" type="radio" id="gray"  value="gray"           > Gray </label>
+            <input style="margin-left: 16px;" name="channel" type="radio" id="blue"  value="blue"           > Blue </input-->
+            <input style="margin-left: 0px;"  name="channel" type="radio" id="gray"   value="gray"           > Gray </label>
             <input style="margin-left: 16px;" name="channel" type="radio" id="color"  value="color" checked > Color </label>
             <br><br>
+            <p>Choose segmentation tool.</p>
+            <input style="margin-left: 0px;" name="U-Net_AgRP" type="checkbox" id="U-Net_AgRP" value="1" checked> U-Net trained on AgRP Darkfield</label>
+            <br><br>
+            <p>Specify desired threshold between 0 and 1.</p>
+            <input name="threshold" type=number min=0 max=1 step=0.1 value="0.5">
+            <br><br>
+            <p>Choose desired output format.</p>
+            <input style="margin-left: 0px;"  name="raw_output"      type="checkbox" id="raw"      value="1" > Raw Model Prediction (PNG)</label>
+            <input style="margin-left: 16px;" name="thrs_output"     type="checkbox" id="thrs"     value="1" > Threshold Prediction (PNG)</label>
+            <input style="margin-left: 16px;" name="contour_output"  type="checkbox" id="contour"  value="1" > Contour of Threshold Prediction (SVG) </label>
+            <input style="margin-left: 16px;" name="skeleton_output" type="checkbox" id="skeleton" value="1" checked > Skeleton of Threshold Prediction (SVG) </label>
+
+            <!--input style="margin-left: 0px;"  name="raw"      id="raw"      type="checkbox" > Raw Model Prediction (PNG)</input>
+            <input style="margin-left: 16px;" name="contour"  id ="contour" type="checkbox" > Contour of Threshold Prediction (SVG)</input>
+            <input style="margin-left: 16px;" name="skeleton" id="skeleton" type="checkbox" checked> Skeleton of Threshold Prediction (SVG)</input>
+            <!--input style="margin-left: 16px;" name="channel" type="checkbox" id="gray"  value="gray"           > Gray </label>
+            <input style="margin-left: 16px;" name="channel" type="checkbox" id="color"  value="color" checked > Color </label-->
+            <br><br><br>
             <button type="submit" class="btn btn-warning">Run</button> <!-- id="compute" onclick="getDensityMap()" -->
         </form>
         <br><br>
